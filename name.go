@@ -64,3 +64,23 @@ const (
 	JokerRed   Name = Name(Joker) | Name(Red)
 	JokerBlack Name = Name(Joker) | Name(Black)
 )
+
+func (name Name) rankByName() Rank {
+	return Rank(name) & rankMask
+}
+
+func (name Name) suitByName() Suit {
+	return Suit(name) & suitMask
+}
+
+func (name Name) String() string {
+	return name.rankByName().String() + " " + name.suitByName().String()
+}
+
+func (card *Card) Name() Name {
+	return card.name
+}
+
+func CardName(card Card) Name {
+	return card.Name()
+}

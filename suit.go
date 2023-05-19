@@ -5,6 +5,7 @@ type (
 	Color uint8
 )
 
+// 4th and 5th bits define suit
 const (
 	Hearts Suit = iota << 4
 	Diamonds
@@ -12,6 +13,7 @@ const (
 	Clubs
 )
 
+// 5th bit enough to color define
 const (
 	Red Color = iota << 5
 	Black
@@ -72,4 +74,36 @@ func (card *Card) IsSpades() bool {
 
 func (card *Card) IsClubs() bool {
 	return card.Suit() == Clubs
+}
+
+func (card *Card) IsRed() bool {
+	return card.Color() == Red
+}
+
+func (card *Card) IsBlack() bool {
+	return card.Color() == Black
+}
+
+func CardIsHearts(card Card) bool {
+	return card.Suit() == Hearts
+}
+
+func CardIsDiamonds(card Card) bool {
+	return card.Suit() == Diamonds
+}
+
+func CardIsSpades(card Card) bool {
+	return card.Suit() == Spades
+}
+
+func CardIsClubs(card Card) bool {
+	return card.Suit() == Clubs
+}
+
+func CardIsRed(card Card) bool {
+	return card.Color() == Red
+}
+
+func CardIsBlack(card Card) bool {
+	return card.Color() == Black
 }
