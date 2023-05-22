@@ -73,11 +73,19 @@ func (name Name) suitByName() Suit {
 	return Suit(name) & suitMask
 }
 
-func (name Name) String() string {
-	return name.rankByName().String() + " " + name.suitByName().String()
+func (name Name) colorByName() Color {
+	return Color(name) & colorMask
 }
 
-func (card *Card) Name() Name {
+func (name Name) String() string {
+	var rank Rank
+	if rank = name.rankByName(); rank == Joker {
+		return rank.String() + " " + name.colorByName().String()
+	}
+	return rank.String() + " " + name.suitByName().String()
+}
+
+func (card Card) Name() Name {
 	return card.name
 }
 

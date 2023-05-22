@@ -44,11 +44,11 @@ func (color Color) String() string {
 	return colorName[color]
 }
 
-func (card *Card) Suit() Suit {
+func (card Card) Suit() Suit {
 	return Suit(card.name) & suitMask
 }
 
-func (card *Card) Color() Color {
+func (card Card) Color() Color {
 	return Color(card.name) & colorMask
 }
 
@@ -60,27 +60,27 @@ func CardColor(card Card) Color {
 	return card.Color()
 }
 
-func (card *Card) IsHearts() bool {
+func (card Card) IsHearts() bool {
 	return card.Suit() == Hearts
 }
 
-func (card *Card) IsDiamonds() bool {
+func (card Card) IsDiamonds() bool {
 	return card.Suit() == Diamonds
 }
 
-func (card *Card) IsSpades() bool {
+func (card Card) IsSpades() bool {
 	return card.Suit() == Spades
 }
 
-func (card *Card) IsClubs() bool {
+func (card Card) IsClubs() bool {
 	return card.Suit() == Clubs
 }
 
-func (card *Card) IsRed() bool {
+func (card Card) IsRed() bool {
 	return card.Color() == Red
 }
 
-func (card *Card) IsBlack() bool {
+func (card Card) IsBlack() bool {
 	return card.Color() == Black
 }
 
