@@ -60,35 +60,4 @@ const (
 	QueenClubs Name = Name(Queen) | Name(Clubs)
 	KingClubs  Name = Name(King) | Name(Clubs)
 	AceClubs   Name = Name(Ace) | Name(Clubs)
-
-	JokerRed   Name = Name(Joker) | Name(Red)
-	JokerBlack Name = Name(Joker) | Name(Black)
 )
-
-func (name Name) rankByName() Rank {
-	return Rank(name) & rankMask
-}
-
-func (name Name) suitByName() Suit {
-	return Suit(name) & suitMask
-}
-
-func (name Name) colorByName() Color {
-	return Color(name) & colorMask
-}
-
-func (name Name) String() string {
-	var rank Rank
-	if rank = name.rankByName(); rank == Joker {
-		return rank.String() + " " + name.colorByName().String()
-	}
-	return rank.String() + " " + name.suitByName().String()
-}
-
-func (card Card) Name() Name {
-	return card.name
-}
-
-func CardName(card Card) Name {
-	return card.Name()
-}

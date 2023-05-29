@@ -4,22 +4,22 @@ type Card struct {
 	name Name
 }
 
+func (card Card) Name() Name {
+	return card.name
+}
+
+func (card Card) Rank() Rank {
+	return card.name.rank()
+}
+
+func (card Card) Suit() Suit {
+	return card.name.suit()
+}
+
+func (card Card) Color() Color {
+	return card.name.color()
+}
+
 func newCard(name Name) Card {
 	return Card{name: name}
-}
-
-func (card Card) String() string {
-	return card.name.String()
-}
-
-func (card Card) HigherThan(card_ Card) bool {
-	return card.name.rankByName() > card_.name.rankByName()
-}
-
-func (card Card) LowerThan(card_ Card) bool {
-	return card.name.rankByName() < card_.name.rankByName()
-}
-
-func (card Card) Equal(card_ Card) bool {
-	return card.name.rankByName() == card_.name.rankByName()
 }

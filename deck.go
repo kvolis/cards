@@ -1,102 +1,121 @@
 package cards
 
-import (
-	"fmt"
-	"sort"
+// Deck, Hand, Table, Discard are similar entities, they are separated for easy use
+type (
+	Deck struct {
+		cards cards
+	}
+	Hand struct {
+		cards cards
+	}
+	Table struct {
+		cards cards
+	}
+	Discard struct {
+		cards cards
+	}
 )
 
-type Deck struct {
-	deck []Card
-}
+type cards []Card
 
-func newDeck36() []Card {
-	deck, i := make([]Card, 36), 0
-	for rank := Six; rank <= Ace; rank++ {
-		for suit := Hearts; suit <= Clubs; suit += 1 << 4 {
-			deck[i] = newCard(Name(rank) | Name(suit))
-			i++
-		}
+func (cards cards) list() []Card {
+	res := make([]Card, len(cards))
+	for i, card := range cards {
+		res[i] = card
 	}
-	return deck
-}
-
-func newDeck52() []Card {
-	deck, i := make([]Card, 52), 0
-	for rank := Two; rank <= Ace; rank++ {
-		for suit := Hearts; suit <= Clubs; suit += 1 << 4 {
-			deck[i] = newCard(Name(rank) | Name(suit))
-			i++
-		}
-	}
-	return deck
-}
-
-func newDeck54() []Card {
-	deck := make([]Card, 54)
-	copy(deck, newDeck52())
-	deck[52], deck[53] = newCard(JokerRed), newCard(JokerBlack)
-	return deck
+	return res
 }
 
 func NewDeck36() Deck {
-	return Deck{deck: newDeck36()}
+	return Deck{cards: newDeck36()}
 }
 
 func NewDeck52() Deck {
-	return Deck{deck: newDeck52()}
+	return Deck{cards: newDeck52()}
 }
 
-func NewDeck54() Deck {
-	return Deck{deck: newDeck54()}
+func NewHand() Hand {
+	return Hand{cards: emptyDeck()}
 }
 
-func (deck Deck) String() string {
-	return fmt.Sprint(deck.deck)
+func NewTable() Table {
+	return Table{cards: emptyDeck()}
 }
 
-func (deck Deck) Sort() {
-	deck.SortByRank()
+func NewDiscard() Discard {
+	return Discard{cards: emptyDeck()}
 }
 
-func (deck Deck) SortByRank() {
-	sort.Sort(byRank(deck.deck))
+func (deck *Deck) List() []Card {
+	return deck.cards.list()
 }
 
-func (deck Deck) SortBySuit() {
-	sort.Sort(bySuit(deck.deck))
+func (hand *Hand) List() []Card {
+	return hand.cards.list()
 }
 
-type (
-	byRank []Card
-	bySuit []Card
-)
-
-func (deck byRank) Len() int {
-	return len(deck)
+func (table *Table) List() []Card {
+	return table.cards.list()
 }
 
-func (deck byRank) Less(i, j int) bool {
-	if deck[i].name.rankByName() == deck[j].name.rankByName() {
-		return deck[i].name.suitByName() < deck[j].name.suitByName()
+func (discard *Discard) List() []Card {
+	return discard.cards.list()
+}
+
+func (deck *Deck) Give(cards []Card) []Card {
+	return deck.give(cards)
+}
+
+func (hand *Hand) Give(cards []Card) []Card {
+	return hand.give(cards)
+}
+
+func (table *Table) Give(cards []Card) []Card {
+	return table.give(cards)
+}
+
+func (discard *Discard) Give(cards []Card) []Card {
+	return discard.give(cards)
+}
+
+func (deck *Deck) Take(cards []Card) {
+	deck.take(cards)
+}
+
+func (hand *Hand) Take(cards []Card) {
+	hand.take(cards)
+}
+
+func (table *Table) Take(cards []Card) {
+	table.take(cards)
+}
+
+func (discard *Discard) Take(cards []Card) {
+	discard.take(cards)
+}
+
+func newDeck36() []Card {
+	cards, i := make([]Card, 36), 0
+	for rank := Six; rank <= Ace; rank++ {
+		for suit := Hearts; suit <= Clubs; suit += 1 << 4 {
+			cards[i] = newCard(Name(rank) | Name(suit))
+			i++
+		}
 	}
-	return deck[i].name.rankByName() < deck[j].name.rankByName()
+	return cards
 }
 
-func (deck byRank) Swap(i, j int) {
-	deck[i], deck[j] = deck[j], deck[i]
-}
-
-func (deck bySuit) Len() int {
-	return len(deck)
-}
-
-func (deck bySuit) Less(i, j int) bool {
-	if deck[i].name.suitByName() == deck[j].name.suitByName() {
-		return deck[i].name.rankByName() < deck[j].name.rankByName()
+func newDeck52() []Card {
+	cards, i := make([]Card, 52), 0
+	for rank := Two; rank <= Ace; rank++ {
+		for suit := Hearts; suit <= Clubs; suit += 1 << 4 {
+			cards[i] = newCard(Name(rank) | Name(suit))
+			i++
+		}
 	}
-	return deck[i].name.suitByName() < deck[j].name.suitByName()
+	return cards
 }
 
-func (deck bySuit) Swap(i, j int) {
-	deck[i], deck[j] = deck[j], deck[i]
+func emptyDeck() []Card {
+	return []Card{}
 }
