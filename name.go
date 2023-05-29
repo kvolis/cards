@@ -1,5 +1,8 @@
 package cards
 
+// Name is single property of Card
+// 6 least bits contain the rank (4) and suit (2)
+// 2 higher bits can be used in the future as additional properties
 type (
 	Name uint8
 )
