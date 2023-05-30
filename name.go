@@ -1,4 +1,4 @@
-package cards
+package main
 
 // Name is single property of Card
 // 6 least bits contain the rank (4) and suit (2)

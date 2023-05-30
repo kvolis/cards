@@ -1,6 +1,7 @@
-package cards
+package main
 
-// Deck, Hand, Table, Discard are similar entities, they are separated for easy use
+// Deck, Hand, Table, Discard, Cards are similar entities, they are separated for easy use
+// Field's hiding provides safety
 type (
 	Deck struct {
 		cards cards
@@ -14,16 +15,19 @@ type (
 	Discard struct {
 		cards cards
 	}
+	Cards struct {
+		cards cards
+	}
 )
 
 type cards []Card
 
-func (cards cards) list() []Card {
-	res := make([]Card, len(cards))
-	for i, card := range cards {
+func (toList cards) list() Cards {
+	res := make(cards, len(toList))
+	for i, card := range toList {
 		res[i] = card
 	}
-	return res
+	return Cards{cards: res}
 }
 
 // NewDeck36 returns card's deck from Six to Ace by all suits
@@ -52,63 +56,78 @@ func NewDiscard() Discard {
 }
 
 // List returns deck's cards
-func (deck *Deck) List() []Card {
+func (deck *Deck) List() Cards {
 	return deck.cards.list()
 }
 
 // List returns hands's cards
-func (hand *Hand) List() []Card {
+func (hand *Hand) List() Cards {
 	return hand.cards.list()
 }
 
 // List returns tables's cards
-func (table *Table) List() []Card {
+func (table *Table) List() Cards {
 	return table.cards.list()
 }
 
 // List returns dicard's cards
-func (discard *Discard) List() []Card {
+func (discard *Discard) List() Cards {
 	return discard.cards.list()
 }
 
-// Give returns deck's cards (if any) and remove it from deck
-func (deck *Deck) Give(cards []Card) []Card {
-	return deck.give(cards)
+// List returns dicard's cards
+func (cards *Cards) List() Cards {
+	return cards.cards.list()
 }
 
-// Give returns hand's cards (if any) and remove it from hand
-func (hand *Hand) Give(cards []Card) []Card {
-	return hand.give(cards)
+// Give returns Deck's cards (if any) and remove it from Deck
+func (deck *Deck) Give(toGive Cards) Cards {
+	return Cards{cards: deck.give(toGive.cards)}
 }
 
-// Give returns table's cards (if any) and remove it from table
-func (table *Table) Give(cards []Card) []Card {
-	return table.give(cards)
+// Give returns Hand's cards (if any) and remove it from Hand
+func (hand *Hand) Give(toGive Cards) Cards {
+	return Cards{cards: hand.give(toGive.cards)}
 }
 
-// Give returns discard's cards (if any) and remove it from discard
-func (discard *Discard) Give(cards []Card) []Card {
-	return discard.give(cards)
+// Give returns Table's cards (if any) and remove it from Table
+func (table *Table) Give(toGive Cards) Cards {
+	return Cards{cards: table.give(toGive.cards)}
 }
 
-// Take append cards to deck
-func (deck *Deck) Take(cards []Card) {
-	deck.take(cards)
+// Give returns Discard's cards (if any) and remove it from Discard
+func (discard *Discard) Give(toGive Cards) Cards {
+	return Cards{cards: discard.give(toGive.cards)}
 }
 
-// Take append cards to hand
-func (hand *Hand) Take(cards []Card) {
-	hand.take(cards)
+// Give returns Cards's cards (if any) and remove it from Cards
+func (cards *Cards) Give(toGive Cards) Cards {
+	return Cards{cards: cards.give(toGive.cards)}
 }
 
-// Take append cards to table
-func (table *Table) Take(cards []Card) {
-	table.take(cards)
+// Take append cards to Deck
+func (deck *Deck) Take(toTake Cards) {
+	deck.take(toTake.cards)
 }
 
-// Take append cards to discard
-func (discard *Discard) Take(cards []Card) {
-	discard.take(cards)
+// Take append cards to Hand
+func (hand *Hand) Take(toTake Cards) {
+	hand.take(toTake.cards)
+}
+
+// Take append cards to Table
+func (table *Table) Take(toTake Cards) {
+	table.take(toTake.cards)
+}
+
+// Take append cards to Discard
+func (discard *Discard) Take(toTake Cards) {
+	discard.take(toTake.cards)
+}
+
+// Take append cards to Cards
+func (cards *Cards) Take(toTake Cards) {
+	cards.take(toTake.cards)
 }
 
 func newDeck36() cards {

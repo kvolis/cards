@@ -1,105 +1,77 @@
-package cards
+package main
 
-func (deck *Deck) give(cards []Card) []Card {
-	res := make([]Card, 0, len(cards))
-	for _, card := range cards {
-		for i, card_ := range deck.cards {
+func (cards *cards) give(toGive cards) ([]Card, []Card) {
+	res := make([]Card, 0, len(toGive))
+	for _, card := range toGive {
+		for i, card_ := range *cards {
 			if card == card_ {
 				res = append(res, card)
-				if l := len(deck.cards); i == l-1 {
+				if l := len(*cards); i == l-1 {
 					if l == 1 {
-						deck.cards = []Card{}
-						return res
+						*cards = []Card{}
+						return res, *cards
 					}
-					deck.cards = deck.cards[:i]
+					*cards = (*cards)[:i]
 					break
 				}
-				deck.cards = append(deck.cards[:i], deck.cards[i+1:]...)
+				*cards = append((*cards)[:i], (*cards)[i+1:]...)
 				break
 			}
 		}
 	}
-	return res
+	return res, *cards
 }
 
-func (deck *Deck) take(cards []Card) {
-	deck.cards = append(deck.cards, cards...)
+func (cards *cards) take(toTake cards) {
+	*cards = append(*cards, toTake...)
 }
 
-func (hand *Hand) give(cards []Card) []Card {
-	res := make([]Card, 0, len(cards))
-	for _, card := range cards {
-		for i, card_ := range hand.cards {
-			if card == card_ {
-				res = append(res, card)
-				if l := len(hand.cards); i == l-1 {
-					if l == 1 {
-						hand.cards = []Card{}
-						return res
-					}
-					hand.cards = hand.cards[:i]
-					break
-				}
-				hand.cards = append(hand.cards[:i], hand.cards[i+1:]...)
-				break
-			}
-		}
-	}
-	return res
+func (deck *Deck) give(toGive cards) cards {
+	given, newDeck := deck.cards.give(toGive)
+	deck.cards = newDeck
+	return given
 }
 
-func (hand *Hand) take(cards []Card) {
-	hand.cards = append(hand.cards, cards...)
+func (deck *Deck) take(toTake cards) {
+	deck.cards.take(toTake)
 }
 
-func (table *Table) give(cards []Card) []Card {
-	res := make([]Card, 0, len(cards))
-	for _, card := range cards {
-		for i, card_ := range table.cards {
-			if card == card_ {
-				res = append(res, card)
-				if l := len(table.cards); i == l-1 {
-					if l == 1 {
-						table.cards = []Card{}
-						return res
-					}
-					table.cards = table.cards[:i]
-					break
-				}
-				table.cards = append(table.cards[:i], table.cards[i+1:]...)
-				break
-			}
-		}
-	}
-	return res
+func (hand *Hand) give(toGive cards) cards {
+	given, newHand := hand.cards.give(toGive)
+	hand.cards = newHand
+	return given
 }
 
-func (table *Table) take(cards []Card) {
-	table.cards = append(table.cards, cards...)
+func (hand *Hand) take(toTake cards) {
+	hand.cards.take(toTake)
 }
 
-func (discard *Discard) give(cards []Card) []Card {
-	res := make([]Card, 0, len(cards))
-	for _, card := range cards {
-		for i, card_ := range discard.cards {
-			if card == card_ {
-				res = append(res, card)
-				if l := len(discard.cards); i == l-1 {
-					if l == 1 {
-						discard.cards = []Card{}
-						return res
-					}
-					discard.cards = discard.cards[:i]
-					break
-				}
-				discard.cards = append(discard.cards[:i], discard.cards[i+1:]...)
-				break
-			}
-		}
-	}
-	return res
+func (table *Table) give(toGive cards) cards {
+	given, newTable := table.cards.give(toGive)
+	table.cards = newTable
+	return given
 }
 
-func (discard *Discard) take(cards []Card) {
-	discard.cards = append(discard.cards, cards...)
+func (table *Table) take(toTake cards) {
+	table.cards.take(toTake)
+}
+
+func (discard *Discard) give(toGive cards) cards {
+	given, newDiscard := discard.cards.give(toGive)
+	discard.cards = newDiscard
+	return given
+}
+
+func (discard *Discard) take(toTake cards) {
+	discard.cards.take(toTake)
+}
+
+func (cards *Cards) give(toGive cards) cards {
+	given, newCards := cards.cards.give(toGive)
+	cards.cards = newCards
+	return given
+}
+
+func (cards *Cards) take(toTake cards) {
+	cards.cards.take(toTake)
 }

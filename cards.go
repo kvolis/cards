@@ -1,4 +1,6 @@
-package cards
+package main
+
+import "fmt"
 
 // Card is the simplest entity
 // Field's hiding provides safety
@@ -32,4 +34,37 @@ func (card Card) String() string {
 
 func newCard(name Name) Card {
 	return Card{name: name}
+}
+
+func main() {
+	deck := NewDeck36()
+	fmt.Println("deck", deck)
+	fmt.Println()
+
+	hand := NewHand()
+	table := NewTable()
+
+	toMove := deck.Give(deck.List()[20:])
+	fmt.Println("deck", deck)
+	fmt.Println()
+
+	hand.Take(toMove)
+	fmt.Println("hand", hand)
+	fmt.Println()
+
+	toMove = hand.Give(hand.List()[10:])
+	fmt.Println("hand", hand)
+	fmt.Println()
+
+	table.Take(toMove)
+	fmt.Println("table", table)
+	fmt.Println()
+
+	toMove = deck.Give(deck.List()[10:])
+	fmt.Println("deck", deck)
+	fmt.Println()
+
+	table.Take(toMove)
+	fmt.Println("table", table)
+	fmt.Println()
 }

@@ -1,4 +1,4 @@
-package cards
+package main
 
 type (
 	Suit  uint8
