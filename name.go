@@ -1,11 +1,9 @@
-package main
+package cards
 
 // Name is single property of Card
-// 6 least bits contain the rank (4) and suit (2)
+// 6 lower bits contain the rank (4) and suit (2)
 // 2 higher bits can be used in the future as additional properties
-type (
-	Name uint8
-)
+type Name uint8
 
 const (
 	TwoHearts   Name = Name(Two) | Name(Hearts)
@@ -64,3 +62,19 @@ const (
 	KingClubs  Name = Name(King) | Name(Clubs)
 	AceClubs   Name = Name(Ace) | Name(Clubs)
 )
+
+func (name Name) String() string {
+	return name.rank().String() + " " + name.suit().String()
+}
+
+func (name Name) rank() Rank {
+	return Rank(name) & rankMask
+}
+
+func (name Name) suit() Suit {
+	return Suit(name) & suitMask
+}
+
+func (name Name) color() Color {
+	return Color(name) & colorMask
+}

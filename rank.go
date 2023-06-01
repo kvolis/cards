@@ -1,4 +1,4 @@
-package main
+package cards
 
 type Rank uint8
 
@@ -35,10 +35,6 @@ var rankName map[Rank]string = map[Rank]string{
 	Queen: "Queen",
 	King:  "King",
 	Ace:   "Ace",
-}
-
-func (name Name) rank() Rank {
-	return Rank(name) & rankMask
 }
 
 func (rank Rank) String() string {

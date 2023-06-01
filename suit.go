@@ -1,4 +1,4 @@
-package main
+package cards
 
 type (
 	Suit  uint8
@@ -34,14 +34,6 @@ var suitName map[Suit]string = map[Suit]string{
 var colorName map[Color]string = map[Color]string{
 	Red:   "Red",
 	Black: "Black",
-}
-
-func (name Name) suit() Suit {
-	return Suit(name) & suitMask
-}
-
-func (name Name) color() Color {
-	return Color(name) & colorMask
 }
 
 func (suit Suit) String() string {
