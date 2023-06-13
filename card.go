@@ -1,35 +1,33 @@
 package cards
 
-// Card is the simplest entity
-// Field's hiding provides safety
-type Card struct {
-	name Name
-}
+type Card uint8
 
-// Name returns card's name as Name type
-func (c Card) Name() Name {
-	return c.name
-}
-
-// Rank returns card's rank as Rank type
+// Rank returns card's rank
 func (c Card) Rank() Rank {
-	return c.name.rank()
+	return Rank(c) & rankMask
 }
 
-// Suit returns card's suit as Suit type
+// Suit returns card's suit
 func (c Card) Suit() Suit {
-	return c.name.suit()
+	return Suit(c) & suitMask
 }
 
-// Color returns card's color as Color type
+// Color returns card's color
 func (c Card) Color() Color {
-	return c.name.color()
+	return Color(c) & colorMask
 }
 
 func (c Card) String() string {
-	return c.name.String()
+	if CardsPrintMode > Full {
+		return c.Rank().String() + c.Suit().String()
+	}
+	return c.Rank().String() + " " + c.Suit().String()
 }
 
-func newCard(name Name) Card {
-	return Card{name: name}
+func (c Card) IsRed() bool {
+	return c.Color() == Red
+}
+
+func (c Card) IsBlack() bool {
+	return c.Color() == Black
 }
