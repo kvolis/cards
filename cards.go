@@ -48,3 +48,49 @@ func (c Cards) AreSameSuit() (bool, *Suit) {
 
 	return true, &suit
 }
+
+// Higher returns one or more cards of the highest rank
+func (c Cards) Higher() Cards {
+	res := Cards{c[0]}
+	if len(c) == 1 {
+		return res
+	}
+
+	for i := 1; i < len(c); i++ {
+		if c[i].Rank() < res[0].Rank() {
+			continue
+		}
+
+		if c[i].Rank() > res[0].Rank() {
+			res = Cards{c[i]}
+			continue
+		}
+
+		res = append(res, c[i])
+	}
+
+	return res
+}
+
+// Lower returns one or more cards of the lowest rank
+func (c Cards) Lower() Cards {
+	res := Cards{c[0]}
+	if len(c) == 1 {
+		return res
+	}
+
+	for i := 1; i < len(c); i++ {
+		if c[i].Rank() > res[0].Rank() {
+			continue
+		}
+
+		if c[i].Rank() < res[0].Rank() {
+			res = Cards{c[i]}
+			continue
+		}
+
+		res = append(res, c[i])
+	}
+
+	return res
+}
