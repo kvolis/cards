@@ -2,6 +2,7 @@ package cards
 
 import (
 	"math/rand"
+	"strings"
 	"time"
 )
 
@@ -93,4 +94,12 @@ func (c Cards) Lower() Cards {
 	}
 
 	return res
+}
+
+func (c Cards) String() string {
+	res := make([]string, len(c))
+	for i, card := range c {
+		res[i] = card.String()
+	}
+	return strings.Join(res, ", ")
 }
