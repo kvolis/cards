@@ -18,7 +18,7 @@ func (c Card) Color() Color {
 }
 
 func (c Card) String() string {
-	if CardsPrintMode > Full {
+	if PrintMode > Full {
 		return c.Rank().String() + c.Suit().String()
 	}
 	return c.Rank().String() + " " + c.Suit().String()

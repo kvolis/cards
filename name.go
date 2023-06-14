@@ -1,11 +1,11 @@
 package cards
 
-var CardsPrintMode = Full
+var PrintMode = Full
 
-type PrintMode uint8
+type printMode uint8
 
 const (
-	Full PrintMode = iota
+	Full printMode = iota
 	Short
 	Symbol
 )

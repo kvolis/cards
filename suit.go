@@ -44,10 +44,10 @@ var suitSymbols map[Suit]string = map[Suit]string{
 }
 
 func (suit Suit) String() string {
-	if CardsPrintMode == Full {
+	if PrintMode == Full {
 		return suitName[suit]
 	}
-	if CardsPrintMode == Short {
+	if PrintMode == Short {
 		return suitName[suit][:1]
 	}
 	return suitSymbols[suit]

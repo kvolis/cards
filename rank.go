@@ -38,7 +38,7 @@ var rankName map[Rank]string = map[Rank]string{
 }
 
 func (rank Rank) String() string {
-	if CardsPrintMode == Full {
+	if PrintMode == Full {
 		return rankName[rank]
 	}
 	if rank <= Nine {
