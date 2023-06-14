@@ -17,7 +17,7 @@ func NewDeck52() Cards {
 	cards, i := make([]Card, 52), 0
 	for rank := Two; rank <= Ace; rank++ {
 		for suit := Hearts; suit <= Clubs; suit += 1 << 4 {
-			//cards[i] = newCard(Name(rank) | Name(suit))
+			cards[i] = Card(rank) | Card(suit)
 			i++
 		}
 	}
