@@ -17,6 +17,7 @@ func (c Card) Color() Color {
 	return Color(c) & colorMask
 }
 
+// String returns a string representation
 func (c Card) String() string {
 	if PrintMode > Full {
 		return c.Rank().String() + c.Suit().String()
@@ -24,10 +25,12 @@ func (c Card) String() string {
 	return c.Rank().String() + " " + c.Suit().String()
 }
 
+// IsRed indicates that card is red
 func (c Card) IsRed() bool {
 	return c.Color() == Red
 }
 
+// IsBlack indicates that card is black
 func (c Card) IsBlack() bool {
 	return c.Color() == Black
 }

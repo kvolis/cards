@@ -37,6 +37,7 @@ var rankName map[Rank]string = map[Rank]string{
 	Ace:   "Ace",
 }
 
+// String returns a string representation
 func (rank Rank) String() string {
 	if PrintMode == Full {
 		return rankName[rank]
