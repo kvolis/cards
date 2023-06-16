@@ -40,11 +40,14 @@ func (c Card) IsBlack() bool {
 func main() {
 	c := NewDeck36()
 	c.Shuffle()
-	c = c[:11]
+	c = c[:17]
 	fmt.Println(c)
 	fmt.Println()
 
+	fmt.Println(c.IndexBy(SevenSpades))
+	fmt.Println()
 	c.Sort()
+
 	fmt.Println(c)
 	fmt.Println()
 	fmt.Println(c.HigherBy(Hearts))
@@ -67,4 +70,26 @@ func main() {
 	fmt.Println(c.Black())
 	fmt.Println()
 	fmt.Println(c.Red())
+
+	fmt.Println()
+	fmt.Println(c.By(Hearts))
+
+	fmt.Println()
+	fmt.Println(c.By(Spades))
+
+	fmt.Println()
+	fmt.Println(c.By(Ten))
+
+	fmt.Println()
+	fmt.Println(c.By(Ace))
+
+	fmt.Println()
+	fmt.Println(c.By(Queen))
+
+	fmt.Println()
+	fmt.Println(c.By(AceClubs))
+
+	fmt.Println()
+	fmt.Println(c.By(Black).Higher())
+
 }

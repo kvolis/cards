@@ -198,3 +198,60 @@ func (c Cards) LowerBy(suit Suit) (*Card, int) {
 	}
 	return &resCard, resIndex
 }
+
+// By returns all cards by rank or suit or color
+func (c Cards) By(rankOrSuitOrColor interface{}) Cards {
+	switch rankOrSuitOrColor.(type) {
+	case Rank:
+		rank := rankOrSuitOrColor.(Rank)
+		return c.byRank(rank)
+	case Suit:
+		suit := rankOrSuitOrColor.(Suit)
+		return c.bySuit(suit)
+	case Color:
+		color := rankOrSuitOrColor.(Color)
+		return c.byColor(color)
+	default:
+		return Cards{}
+	}
+}
+
+// IndexBy returns index of card in cards if any, else returns -1
+func (c Cards) IndexBy(card Card) int {
+	for i, card_ := range c {
+		if card_ == card {
+			return i
+		}
+	}
+	return -1
+}
+
+func (c Cards) byRank(rank Rank) Cards {
+	res := Cards{}
+	for _, card := range c {
+		if card.Rank() == rank {
+			res = append(res, card)
+		}
+	}
+	return res
+}
+
+func (c Cards) bySuit(suit Suit) Cards {
+	res := Cards{}
+	for _, card := range c {
+		if card.Suit() == suit {
+			res = append(res, card)
+		}
+	}
+	return res
+}
+
+func (c Cards) byColor(color Color) Cards {
+	res := Cards{}
+	for _, card := range c {
+		if card.Color() == color {
+			res = append(res, card)
+		}
+	}
+	return res
+}
