@@ -1,4 +1,4 @@
-package cards
+package main
 
 type (
 	Suit  uint8
@@ -43,6 +43,7 @@ var suitSymbols map[Suit]string = map[Suit]string{
 	Clubs:    "\u2663",
 }
 
+// String returns a string representation
 func (suit Suit) String() string {
 	if PrintMode == Full {
 		return suitName[suit]
@@ -53,6 +54,7 @@ func (suit Suit) String() string {
 	return suitSymbols[suit]
 }
 
+// String returns a string representation
 func (color Color) String() string {
 	return colorName[color]
 }

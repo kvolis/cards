@@ -1,4 +1,6 @@
-package cards
+package main
+
+import "fmt"
 
 type Card uint8
 
@@ -17,6 +19,7 @@ func (c Card) Color() Color {
 	return Color(c) & colorMask
 }
 
+// String returns a string representation
 func (c Card) String() string {
 	if PrintMode > Full {
 		return c.Rank().String() + c.Suit().String()
@@ -24,10 +27,44 @@ func (c Card) String() string {
 	return c.Rank().String() + " " + c.Suit().String()
 }
 
+// IsRed indicates that card is red
 func (c Card) IsRed() bool {
 	return c.Color() == Red
 }
 
+// IsBlack indicates that card is black
 func (c Card) IsBlack() bool {
 	return c.Color() == Black
+}
+
+func main() {
+	c := NewDeck36()
+	c.Shuffle()
+	c = c[:11]
+	fmt.Println(c)
+	fmt.Println()
+
+	c.Sort()
+	fmt.Println(c)
+	fmt.Println()
+	fmt.Println(c.HigherBy(Hearts))
+	fmt.Println(c.HigherBy(Spades))
+	fmt.Println(c.HigherBy(Diamonds))
+	fmt.Println(c.HigherBy(Clubs))
+
+	fmt.Println()
+
+	fmt.Println(c.LowerBy(Hearts))
+	fmt.Println(c.LowerBy(Spades))
+	fmt.Println(c.LowerBy(Diamonds))
+	fmt.Println(c.LowerBy(Clubs))
+
+	fmt.Println()
+	fmt.Println(c.Higher())
+	fmt.Println(c.Lower())
+
+	fmt.Println()
+	fmt.Println(c.Black())
+	fmt.Println()
+	fmt.Println(c.Red())
 }

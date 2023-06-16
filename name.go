@@ -1,4 +1,4 @@
-package cards
+package main
 
 var PrintMode = Full
 
