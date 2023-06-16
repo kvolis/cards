@@ -1,4 +1,4 @@
-package main
+package cards
 
 // NewDeck36 returns card's deck from Six to Ace by all suits
 func NewDeck36() Cards {

@@ -1,4 +1,4 @@
-package main
+package cards
 
 type Rank uint8
 

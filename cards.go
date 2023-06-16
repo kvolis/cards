@@ -1,4 +1,4 @@
-package main
+package cards
 
 import (
 	"math/rand"
