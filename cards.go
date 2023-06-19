@@ -22,7 +22,7 @@ func (c Cards) Len() int {
 
 // Shuffle shuffles cards randomly
 func (c Cards) Shuffle() {
-	rand.Shuffle(len(c), func(i, j int) { c[i], c[j] = c[j], c[i] })
+	rand.Shuffle(c.Len(), func(i, j int) { c[i], c[j] = c[j], c[i] })
 }
 
 // Sort sorts cards by rank from low to high and by suit (Hearts, Diamonds, Spades, Clubs)
@@ -113,11 +113,11 @@ func (c Cards) Black() Cards {
 // AreSameSuit indicates that all cards in the collect are same suit, and returns that suit, else returns false and nil
 func (c Cards) AreSameSuit() (bool, *Suit) {
 	suit := c[0].Suit()
-	if len(c) == 1 {
+	if c.Len() == 1 {
 		return true, &suit
 	}
 
-	for i := 1; i < len(c); i++ {
+	for i := 1; i < c.Len(); i++ {
 		if c[i].Suit() != suit {
 			return false, nil
 		}
@@ -129,11 +129,11 @@ func (c Cards) AreSameSuit() (bool, *Suit) {
 // Higher returns one or more cards of the highest rank
 func (c Cards) Higher() Cards {
 	res := Cards{c[0]}
-	if len(c) == 1 {
+	if c.Len() == 1 {
 		return res
 	}
 
-	for i := 1; i < len(c); i++ {
+	for i := 1; i < c.Len(); i++ {
 		if c[i].Rank() < res[0].Rank() {
 			continue
 		}
@@ -152,11 +152,11 @@ func (c Cards) Higher() Cards {
 // Lower returns one or more cards of the lowest rank
 func (c Cards) Lower() Cards {
 	res := Cards{c[0]}
-	if len(c) == 1 {
+	if c.Len() == 1 {
 		return res
 	}
 
-	for i := 1; i < len(c); i++ {
+	for i := 1; i < c.Len(); i++ {
 		if c[i].Rank() > res[0].Rank() {
 			continue
 		}
@@ -175,7 +175,7 @@ func (c Cards) Lower() Cards {
 // Shift draws top count cards and moves down.
 // Incorrect count processed normally, count < 0 ignored, count > len(Cards) processed like repeat
 func (c Cards) Shift(count int) {
-	l := len(c)
+	l := c.Len()
 	if count = count % l; count == 0 || count < 0 {
 		return
 	}
@@ -190,7 +190,7 @@ func (c Cards) Shift(count int) {
 
 // String returns a string representation
 func (c Cards) String() string {
-	res := make([]string, len(c))
+	res := make([]string, c.Len())
 	for i, card := range c {
 		res[i] = card.String()
 	}
@@ -321,6 +321,26 @@ func (c Cards) Bottom(count int) Cards {
 		count = l
 	}
 	return c[l-count:]
+}
+
+// AreUnique indicates that all cards in the collect are unique
+func (c Cards) AreUnique() bool {
+	return c.Len() == c.Unique().Len()
+}
+
+// Unique returns unique cards (removes dublicates is any).
+// The sorting of the original order is preserved
+func (c Cards) Unique() Cards {
+	temp := make(map[Card]struct{})
+	res := Cards{}
+	for _, card := range c {
+		if _, ok := temp[card]; ok {
+			continue
+		}
+		temp[card] = struct{}{}
+		res = append(res, card)
+	}
+	return res[:]
 }
 
 func (c Cards) byRank(rank Rank) Cards {
