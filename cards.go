@@ -7,13 +7,22 @@ import (
 	"time"
 )
 
+var _ = func() bool {
+	rand.Seed(time.Now().UnixNano())
+	return true
+}()
+
 // Cards are collect of Card entity
 type Cards []Card
 
+// Len returns cards count in the collect
+func (c Cards) Len() int {
+	return len(c)
+}
+
 // Shuffle shuffles cards randomly
 func (c Cards) Shuffle() {
-	rand.Seed(time.Now().UnixNano())
-	rand.Shuffle(len(c), func(i, j int) { c[i], c[j] = c[j], c[i] })
+	rand.Shuffle(c.Len(), func(i, j int) { c[i], c[j] = c[j], c[i] })
 }
 
 // Sort sorts cards by rank from low to high and by suit (Hearts, Diamonds, Spades, Clubs)
@@ -24,6 +33,39 @@ func (c Cards) Sort() {
 		}
 		return c[i].Rank() < c[j].Rank()
 	})
+}
+
+// Random returns count random cards from the collect.
+// Sorting cards result is correct. Incorrect count processed normally
+func (c Cards) Random(count int) Cards {
+	if count < 1 {
+		return Cards{}
+	}
+	l := c.Len()
+	if count > l {
+		count = l
+	}
+
+	srcIdxs := make([]int, l)
+	rndIdxs := make([]int, count)
+	for i := 0; i < l; i++ {
+		srcIdxs[i] = i
+	}
+	for i := 0; i < count; i++ {
+		l := len(srcIdxs)
+		r := rand.Intn(l)
+		rndIdxs[i] = srcIdxs[r]
+		srcIdxs[r] = srcIdxs[l-1]
+		srcIdxs = srcIdxs[:l-1]
+	}
+	sort.Ints(rndIdxs)
+
+	res := make(Cards, count)
+	for n, i := range rndIdxs {
+		res[n] = c[i]
+	}
+
+	return res
 }
 
 // AreRed indicates that all cards in the collect are red
@@ -71,11 +113,11 @@ func (c Cards) Black() Cards {
 // AreSameSuit indicates that all cards in the collect are same suit, and returns that suit, else returns false and nil
 func (c Cards) AreSameSuit() (bool, *Suit) {
 	suit := c[0].Suit()
-	if len(c) == 1 {
+	if c.Len() == 1 {
 		return true, &suit
 	}
 
-	for i := 1; i < len(c); i++ {
+	for i := 1; i < c.Len(); i++ {
 		if c[i].Suit() != suit {
 			return false, nil
 		}
@@ -87,11 +129,11 @@ func (c Cards) AreSameSuit() (bool, *Suit) {
 // Higher returns one or more cards of the highest rank
 func (c Cards) Higher() Cards {
 	res := Cards{c[0]}
-	if len(c) == 1 {
+	if c.Len() == 1 {
 		return res
 	}
 
-	for i := 1; i < len(c); i++ {
+	for i := 1; i < c.Len(); i++ {
 		if c[i].Rank() < res[0].Rank() {
 			continue
 		}
@@ -110,11 +152,11 @@ func (c Cards) Higher() Cards {
 // Lower returns one or more cards of the lowest rank
 func (c Cards) Lower() Cards {
 	res := Cards{c[0]}
-	if len(c) == 1 {
+	if c.Len() == 1 {
 		return res
 	}
 
-	for i := 1; i < len(c); i++ {
+	for i := 1; i < c.Len(); i++ {
 		if c[i].Rank() > res[0].Rank() {
 			continue
 		}
@@ -130,10 +172,10 @@ func (c Cards) Lower() Cards {
 	return res
 }
 
-// Shift draws top count cards and moves down
+// Shift draws top count cards and moves down.
 // Incorrect count processed normally, count < 0 ignored, count > len(Cards) processed like repeat
 func (c Cards) Shift(count int) {
-	l := len(c)
+	l := c.Len()
 	if count = count % l; count == 0 || count < 0 {
 		return
 	}
@@ -148,7 +190,7 @@ func (c Cards) Shift(count int) {
 
 // String returns a string representation
 func (c Cards) String() string {
-	res := make([]string, len(c))
+	res := make([]string, c.Len())
 	for i, card := range c {
 		res[i] = card.String()
 	}
@@ -224,6 +266,81 @@ func (c Cards) IndexBy(card Card) int {
 		}
 	}
 	return -1
+}
+
+// TransferTo moves cards (if any) from src to dst.
+// If there are duplicate cards in the src and transferred, they will be processed correctly, the order in the src and dst will be preserved
+func (src *Cards) TransferTo(dst *Cards, transferred Cards) {
+	toTransfer := make(map[Card]int)
+	for _, card := range transferred {
+		toTransfer[card]++
+	}
+
+	newSrc := Cards{}
+	temp := make(Cards, dst.Len())
+	copy(temp, *dst)
+	for _, card := range *src {
+		if v, ok := toTransfer[card]; ok {
+			temp = append(temp, card)
+			if v == 1 {
+				delete(toTransfer, card)
+				continue
+			}
+			toTransfer[card]--
+			continue
+		}
+		newSrc = append(newSrc, card)
+	}
+
+	*src = make(Cards, len(newSrc))
+	copy(*src, newSrc)
+
+	*dst = make(Cards, len(temp))
+	copy(*dst, temp)
+}
+
+// Top returns count top cards
+func (c Cards) Top(count int) Cards {
+	if count < 1 {
+		return Cards{}
+	}
+	l := c.Len()
+	if count > l {
+		count = l
+	}
+	return c[:count]
+}
+
+// Bottom returns count bottom cards
+func (c Cards) Bottom(count int) Cards {
+	if count < 1 {
+		return Cards{}
+	}
+	l := c.Len()
+	if count > l {
+		count = l
+	}
+	return c[l-count:]
+}
+
+// AreUnique indicates that all cards in the collect are unique
+func (c Cards) AreUnique() bool {
+	return c.Len() == c.Unique().Len()
+}
+
+// Unique returns unique cards (removes dublicates is any).
+// The sorting of the original order is preserved
+func (c Cards) Unique() Cards {
+	temp := make(map[Card]struct{})
+	res := Cards{}
+	for _, card := range c {
+		if _, ok := temp[card]; ok {
+			continue
+		}
+		temp[card] = struct{}{}
+		res = append(res, card)
+	}
+	return res[:]
 }
 
 func (c Cards) byRank(rank Rank) Cards {
