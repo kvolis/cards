@@ -7,12 +7,21 @@ import (
 	"time"
 )
 
+var _ = func() bool {
+	rand.Seed(time.Now().UnixNano())
+	return true
+}()
+
 // Cards are collect of Card entity
 type Cards []Card
 
+// Len returns cards count in the collect
+func (c Cards) Len() int {
+	return len(c)
+}
+
 // Shuffle shuffles cards randomly
 func (c Cards) Shuffle() {
-	rand.Seed(time.Now().UnixNano())
 	rand.Shuffle(len(c), func(i, j int) { c[i], c[j] = c[j], c[i] })
 }
 
@@ -24,6 +33,39 @@ func (c Cards) Sort() {
 		}
 		return c[i].Rank() < c[j].Rank()
 	})
+}
+
+// Random returns count random cards from the collect.
+// Sorting cards result is correct. Incorrect count processed normally
+func (c Cards) Random(count int) Cards {
+	if count < 1 {
+		return Cards{}
+	}
+	l := c.Len()
+	if count > l {
+		count = l
+	}
+
+	srcIdxs := make([]int, l)
+	rndIdxs := make([]int, count)
+	for i := 0; i < l; i++ {
+		srcIdxs[i] = i
+	}
+	for i := 0; i < count; i++ {
+		l := len(srcIdxs)
+		r := rand.Intn(l)
+		rndIdxs[i] = srcIdxs[r]
+		srcIdxs[r] = srcIdxs[l-1]
+		srcIdxs = srcIdxs[:l-1]
+	}
+	sort.Ints(rndIdxs)
+
+	res := make(Cards, count)
+	for n, i := range rndIdxs {
+		res[n] = c[i]
+	}
+
+	return res
 }
 
 // AreRed indicates that all cards in the collect are red
@@ -130,7 +172,7 @@ func (c Cards) Lower() Cards {
 	return res
 }
 
-// Shift draws top count cards and moves down
+// Shift draws top count cards and moves down.
 // Incorrect count processed normally, count < 0 ignored, count > len(Cards) processed like repeat
 func (c Cards) Shift(count int) {
 	l := len(c)
@@ -224,6 +266,61 @@ func (c Cards) IndexBy(card Card) int {
 		}
 	}
 	return -1
+}
+
+// TransferTo moves cards (if any) from src to dst.
+// If there are duplicate cards in the src and transferred, they will be processed correctly, the order in the src and dst will be preserved
+func (src *Cards) TransferTo(dst *Cards, transferred Cards) {
+	toTransfer := make(map[Card]int)
+	for _, card := range transferred {
+		toTransfer[card]++
+	}
+
+	newSrc := Cards{}
+	temp := make(Cards, dst.Len())
+	copy(temp, *dst)
+	for _, card := range *src {
+		if v, ok := toTransfer[card]; ok {
+			temp = append(temp, card)
+			if v == 1 {
+				delete(toTransfer, card)
+				continue
+			}
+			toTransfer[card]--
+			continue
+		}
+		newSrc = append(newSrc, card)
+	}
+
+	*src = make(Cards, len(newSrc))
+	copy(*src, newSrc)
+
+	*dst = make(Cards, len(temp))
+	copy(*dst, temp)
+}
+
+// Top returns count top cards
+func (c Cards) Top(count int) Cards {
+	if count < 1 {
+		return Cards{}
+	}
+	l := c.Len()
+	if count > l {
+		count = l
+	}
+	return c[:count]
+}
+
+// Bottom returns count bottom cards
+func (c Cards) Bottom(count int) Cards {
+	if count < 1 {
+		return Cards{}
+	}
+	l := c.Len()
+	if count > l {
+		count = l
+	}
+	return c[l-count:]
 }
 
 func (c Cards) byRank(rank Rank) Cards {
