@@ -4,12 +4,12 @@
 This package is handy for creating most of the popular card games. Its functionality is sufficient for quick and easy operations with entities such as Card and Cards (such as Deck, Hand, Discard, etc). There are no Jokers in the current implementation, so make sure you don't need these cards (unless you plan to cheat :-) Work with Jokers will definitely be implemented later.
 
 Here are the following entities that you can operate on:
-- `Rank` (from $$Two$$ to $$Ace$$)
-- `Suit` ($$Hearts$$, $$Diamonds$$, $$Spades$$, $$Crosses$$)
-- `Color` ($$Red$$, $$Black$$)
+- `Rank` (from **Two** to **Ace**)
+- `Suit` (**Hearts**, **Diamonds**, **Spades**, **Crosses**)
+- `Color` (**Red**, **Black**)
 - `Card` (all combinations of `Rank` and `Suit`)
 - `Cards` (collection of `Card` as a standard Go slice)
-All entities satisfy the standard library $$Stringer$$ interface.
+All entities satisfy the standard library **Stringer** interface.
 
 ## Features
 - Create decks of 36 or 52 cards
