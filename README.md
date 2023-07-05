@@ -9,7 +9,8 @@ Here are the following entities that you can operate on:
 - `Color` (**Red**, **Black**)
 - `Card` (all combinations of `Rank` and `Suit`)
 - `Cards` (collection of `Card` as a standard Go slice)
-All entities satisfy the standard library **Stringer** interface.
+
+All entities satisfy the standard library **Stringer** interface, so you can pretty print its.
 
 ## Features
 - Create decks of 36 or 52 cards
