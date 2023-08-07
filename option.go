@@ -47,20 +47,38 @@ func SetHOptTo(c *Card, val bool) {
 	c.SetHOpt(val)
 }
 
-func (c *Card) setOpt(val bool, pos uint8) {
-	if val {
-		c.setBit(pos)
-		return
-	}
-	c.clearBit(pos)
+// SetLOpt sets the value of the 6th bit (the Lower of the two free bits) to all cards in the collect
+func (c *Cards) SetLOpt(val bool) {
+	c.setOpt(val, 6)
 }
 
-func (c *Card) setBit(pos uint8) {
+// SetHOpt sets the value of the 7th bit (the Higher of the two free bits) to all cards in the collect
+func (c *Cards) SetHOpt(val bool) {
+	c.setOpt(val, 7)
+}
+
+func (c *Cards) setOpt(val bool, pos uint8) {
+	for i, card := range *c {
+		(*c)[i] = *card.setOpt(val, pos)
+	}
+}
+
+func (c *Card) setOpt(val bool, pos uint8) *Card {
+	if val {
+		return c.setBit(pos)
+
+	}
+	return c.clearBit(pos)
+}
+
+func (c *Card) setBit(pos uint8) *Card {
 	mask := 1 << pos
 	*c |= Card(mask)
+	return c
 }
 
-func (c *Card) clearBit(pos uint8) {
+func (c *Card) clearBit(pos uint8) *Card {
 	mask := ^(1 << pos)
 	*c &= Card(mask)
+	return c
 }
