@@ -12,13 +12,19 @@ const (
 	colorMask Color = 0b00100000
 )
 
+// Red and Black as JRed and JBlack are used as a suit only for Jokers
+// Suit(JRed) and Suit(JBlack) are not the same as Color(Red) and Color(Black)
 const (
 	Hearts Suit = iota << 4
 	Diamonds
 	Spades
 	Clubs
+
+	JRed   = Suit(Red)
+	JBlack = Suit(Black)
 )
 
+// Color(Red) and Color(Black) are not the same as Suit(JRed) and Suit(JBlack)
 const (
 	Red Color = iota << 5
 	Black
@@ -45,16 +51,20 @@ var suitSymbols map[Suit]string = map[Suit]string{
 
 // String returns a string representation
 func (suit Suit) String() string {
-	if PrintMode == Full {
+	switch PrintMode {
+	case Short:
+		return suitName[suit][:1]
+	case Symbol:
+		return suitSymbols[suit]
+	default:
 		return suitName[suit]
 	}
-	if PrintMode == Short {
-		return suitName[suit][:1]
-	}
-	return suitSymbols[suit]
 }
 
 // String returns a string representation
 func (color Color) String() string {
+	if PrintMode < Full {
+		return colorName[color][:1]
+	}
 	return colorName[color]
 }

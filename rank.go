@@ -19,6 +19,7 @@ const (
 	Queen
 	King
 	Ace
+	Joker
 )
 
 var rankName map[Rank]string = map[Rank]string{
@@ -35,18 +36,21 @@ var rankName map[Rank]string = map[Rank]string{
 	Queen: "Queen",
 	King:  "King",
 	Ace:   "Ace",
+	Joker: "Jocker",
 }
 
 // String returns a string representation
 func (rank Rank) String() string {
-	if PrintMode == Full {
+	switch {
+	case PrintMode == Full:
 		return rankName[rank]
-	}
-	if rank <= Nine {
+	case rank == Joker:
+		return "X"
+	case rank <= Nine:
 		return string(rune(rank + 2 + '0'))
-	}
-	if rank >= Jack {
+	case rank >= Jack:
 		return rankName[rank][:1]
+	default:
+		return "10"
 	}
-	return "10"
 }

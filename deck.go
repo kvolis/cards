@@ -23,3 +23,16 @@ func NewDeck52() Cards {
 	}
 	return cards
 }
+
+// NewDeck54 returns card's deck from Two to Ace by all suits and Red and Black Jokers
+func NewDeck54() Cards {
+	cards, i := make(Cards, 54), 0
+	for rank := Two; rank <= Ace; rank++ {
+		for suit := Hearts; suit <= Clubs; suit += 1 << 4 {
+			cards[i] = Card(rank) | Card(suit)
+			i++
+		}
+	}
+	cards[52], cards[53] = JokerRed, JokerBlack
+	return cards
+}
