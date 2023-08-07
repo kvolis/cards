@@ -9,6 +9,9 @@ func (c Card) Rank() Rank {
 
 // Suit returns card's suit
 func (c Card) Suit() Suit {
+	if c.Rank() == Joker {
+		return Suit(Color(c) & colorMask)
+	}
 	return Suit(c) & suitMask
 }
 
@@ -19,10 +22,18 @@ func (c Card) Color() Color {
 
 // String returns a string representation
 func (c Card) String() string {
-	if PrintMode > Full {
-		return c.Rank().String() + c.Suit().String()
+	sep := ""
+	if PrintMode == Full {
+		sep = " "
 	}
-	return c.Rank().String() + " " + c.Suit().String()
+
+	suit := c.Suit().String()
+	rank := c.Rank()
+	if rank == Joker {
+		suit = c.Color().String()
+	}
+
+	return rank.String() + sep + suit
 }
 
 // IsRed indicates that card is red

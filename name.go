@@ -5,9 +5,9 @@ var PrintMode = Full
 type printMode uint8
 
 const (
-	Full printMode = iota
-	Short
+	Short printMode = iota
 	Symbol
+	Full
 )
 
 const (
@@ -66,4 +66,7 @@ const (
 	QueenClubs Card = Card(Queen) | Card(Clubs)
 	KingClubs  Card = Card(King) | Card(Clubs)
 	AceClubs   Card = Card(Ace) | Card(Clubs)
+
+	JokerRed   Card = Card(Joker) | Card(Red)
+	JokerBlack Card = Card(Joker) | Card(Black)
 )

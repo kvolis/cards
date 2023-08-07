@@ -7,11 +7,6 @@ import (
 	"time"
 )
 
-var _ = func() bool {
-	rand.Seed(time.Now().UnixNano())
-	return true
-}()
-
 // Cards are collect of Card entity
 type Cards []Card
 
@@ -22,7 +17,8 @@ func (c Cards) Len() int {
 
 // Shuffle shuffles cards randomly
 func (c Cards) Shuffle() {
-	rand.Shuffle(c.Len(), func(i, j int) { c[i], c[j] = c[j], c[i] })
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	r.Shuffle(c.Len(), func(i, j int) { c[i], c[j] = c[j], c[i] })
 }
 
 // Sort sorts cards by rank from low to high and by suit (Hearts, Diamonds, Spades, Clubs)
@@ -242,17 +238,14 @@ func (c Cards) LowerBy(suit Suit) (*Card, int) {
 }
 
 // By returns all cards by rank or suit or color
-func (c Cards) By(rankOrSuitOrColor interface{}) Cards {
-	switch rankOrSuitOrColor.(type) {
+func (c Cards) By(rankSuitColor interface{}) Cards {
+	switch rankSuitColor.(type) {
 	case Rank:
-		rank := rankOrSuitOrColor.(Rank)
-		return c.byRank(rank)
+		return c.byRank(rankSuitColor.(Rank))
 	case Suit:
-		suit := rankOrSuitOrColor.(Suit)
-		return c.bySuit(suit)
+		return c.bySuit(rankSuitColor.(Suit))
 	case Color:
-		color := rankOrSuitOrColor.(Color)
-		return c.byColor(color)
+		return c.byColor(rankSuitColor.(Color))
 	default:
 		return Cards{}
 	}
