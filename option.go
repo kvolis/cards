@@ -7,28 +7,44 @@ const (
 	highOptMask = 0b10000000
 )
 
-func (c *Card) OptL() bool {
+// LOpt returns the value of the 6th bit (the Lower of the two free bits)
+func (c *Card) LOpt() bool {
 	return option(*c)&lowOptMask == lowOptMask
 }
 
-func (c *Card) OptH() bool {
+// HOpt returns the value of the 7th bit (the Higher of the two free bits)
+func (c *Card) HOpt() bool {
 	return option(*c)&highOptMask == highOptMask
 }
 
-func OptL(c *Card) bool {
-	return c.OptL()
+// LOpt returns the value of the 6th bit (the Lower of the two free bits)
+func LOpt(c *Card) bool {
+	return c.LOpt()
 }
 
-func OptH(c *Card) bool {
-	return c.OptH()
+// HOpt returns the value of the 7th bit (the Higher of the two free bits)
+func HOpt(c *Card) bool {
+	return c.HOpt()
 }
 
-func (c *Card) SetOptL(val bool) {
+// SetLOpt sets the value of the 6th bit (the Lower of the two free bits)
+func (c *Card) SetLOpt(val bool) {
 	c.setOpt(val, 6)
 }
 
-func (c *Card) SetOptH(val bool) {
+// SetHOpt sets the value of the 7th bit (the Higher of the two free bits)
+func (c *Card) SetHOpt(val bool) {
 	c.setOpt(val, 7)
+}
+
+// SetLOpt sets the value of the 6th bit (the Lower of the two free bits)
+func SetLOptTo(c *Card, val bool) {
+	c.SetLOpt(val)
+}
+
+// SetHOpt sets the value of the 7th bit (the Higher of the two free bits)
+func SetHOptTo(c *Card, val bool) {
+	c.SetHOpt(val)
 }
 
 func (c *Card) setOpt(val bool, pos uint8) {
