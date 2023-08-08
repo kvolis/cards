@@ -177,7 +177,7 @@ func (c Cards) Shift(count int) {
 	}
 
 	temp := make(Cards, l-count)
-	copy(temp, c[l-count:])
+	copy(temp, c[:l-count])
 	copy(c, c[l-count:])
 	for i := 0; i < count; i++ {
 		c[i+count] = temp[i]
