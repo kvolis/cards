@@ -301,7 +301,7 @@ func (c Cards) Top(count int) Cards {
 	if count > l {
 		count = l
 	}
-	return c[:count]
+	return c[l-count:]
 }
 
 // Bottom returns count bottom cards
@@ -313,7 +313,7 @@ func (c Cards) Bottom(count int) Cards {
 	if count > l {
 		count = l
 	}
-	return c[l-count:]
+	return c[:count]
 }
 
 // AreUnique indicates that all cards in the collect are unique
