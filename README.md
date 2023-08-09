@@ -21,7 +21,7 @@ All entities satisfy the standard library **Stringer** interface, so you can pre
 - and others, see the full description of the methods below
 
 ###### Note that
-the `Card` entity is a `uint8` type. The _lower 4 bits_ determine the `Rank` of the `Card`, the next _2 bits_ determine its `Suit`, with the _5th bit_ indicating its `Color`. Thus, both `Card` and `Cards` take up little space in memory.
+the `Card` entity is a `uint8` type. The _lower 4 bits_ determine the `Rank` of the `Card`, the next _2 bits_ determine its `Suit`, with the _5th bit_ indicating its `Color`. Thus, both `Card` and `Cards` take up not much space in memory.
 
 This gives you _2 free bits_ in which you can store additional information about a particular card (for example, the card is face up or face down on the table).
 
@@ -92,16 +92,18 @@ player3 = append(player3, cards.SevenClubs, cards.SevenClubs)
 player3.AreUnique()
 // false
 
+
+// you can set your options to any card
 fmt.Printf("%08b \n", player1)
 // [00011011 00110110 00011100 00000100 00001010]
-player1.SetHOpt(true)     // 7th, higher of two free bits = 1; indicates, for example, that the cards are face down
+player1.SetHOpt(true)     // indicates, for example, that the cards are face down
 player1[1].SetHOpt(false) // 0 value for one element
 fmt.Printf("%08b \n", player1)
 // [10011011 00110110 10011100 10000100 10001010]
 
 fmt.Printf("%08b \n", player2)
 // [00110101 00110111 00001001 00100101 00100111]
-player2.SetLOpt(true)     // 6th, lower of two free bits = 1, indicates, for example, that cards were viewed by the player
+player2.SetLOpt(true)     // indicates, for example, that cards were viewed by the player
 player2[2].SetLOpt(false) // 0 value for one element
 fmt.Printf("%08b \n", player2)
 // [01110101 01110111 00001001 01100101 01100111]
